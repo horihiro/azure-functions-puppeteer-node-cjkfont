@@ -1,0 +1,23 @@
+{
+  "name": "puppeteer-functions",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc",
+    "postinstall": "curl -s \"https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip\" -o /tmp/fonts.zip && unzip -o /tmp/fonts.zip -d /tmp/fonts/ && mkdir -p ./fonts && mv /tmp/fonts/*.otf ./fonts",
+    "watch": "tsc -w",
+    "prestart": "npm run build",
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "glob": "^7.1.6",
+    "glob-promise": "^3.4.0",
+    "puppeteer": "^5.2.1"
+  },
+  "devDependencies": {
+    "@azure/functions": "^1.0.2-beta2",
+    "@types/puppeteer": "^3.0.1",
+    "typescript": "^3.3.3"
+  }
+}
