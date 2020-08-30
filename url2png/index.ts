@@ -2,7 +2,6 @@ import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import * as puppeteer from "puppeteer"
 import * as util from "util"
 import { promises as fs } from "fs"
-import * as glob from "glob-promise"
 import { exec } from "child_process"
 
 const execAsync = util.promisify(exec);
