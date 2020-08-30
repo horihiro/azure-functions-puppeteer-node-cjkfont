@@ -8,21 +8,22 @@ import { exec } from "child_process"
 const execAsync = util.promisify(exec);
 
 const fontUpdate = async () => {
+    const fontPath = process.env.FONT_PATH || '/home/.fonts';
     try {
-        await fs.stat('/home/.fonts');
+        await fs.stat(fontPath);
         return
     } catch {
     }
 
-    // mkdir ~/.fonts
-    await fs.mkdir("/home/.fonts");
+    // mkdir $FONT_PATH
+    await fs.mkdir(fontPath, {recursive: true});
 
-    // cp /home/site/wwwroot/fonts/* ~/.fonts
+    // cp /home/site/wwwroot/fonts/* $FONT_PATH
     const fonts = await glob("/home/site/wwwroot/fonts/*.otf");
     await fonts.reduce((previousState, currentValue) => {
         return previousState.then(() => {
             const fontfile = currentValue.replace(/.*\/([^/]+)/, '$1')
-            return fs.copyFile(currentValue, `/home/.fonts/${fontfile}`);
+            return fs.copyFile(currentValue, `${fontPath}/${fontfile}`);
         })
     }, Promise.resolve());
 
