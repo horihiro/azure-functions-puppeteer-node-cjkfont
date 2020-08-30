@@ -1,7 +1,7 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import * as puppeteer from "puppeteer"
 import * as util from "util"
-import { promises as fs }  from "fs"
+import { promises as fs } from "fs"
 import * as glob from "glob-promise"
 import { exec } from "child_process"
 
@@ -37,12 +37,14 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     try {
         await fontUpdate();
 
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            args: process.env.PUPPETEER_ARGS?.split(' ')
+        });
         const page = await browser.newPage();
 
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
         await page.emulateMediaType('screen');
-        const body = await page.screenshot({type: 'png'});
+        const body = await page.screenshot({ type: 'png' });
         browser.close();
 
         context.res = {
