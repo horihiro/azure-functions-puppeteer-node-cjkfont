@@ -15,20 +15,8 @@ const fontUpdate = async () => {
     } catch {
     }
 
-    // mkdir $FONT_PATH
-    await fs.mkdir(fontPath, {recursive: true});
-
-    // cp /home/site/wwwroot/fonts/* $FONT_PATH
-    const fonts = await glob("/home/site/wwwroot/fonts/*.otf");
-    await fonts.reduce((previousState, currentValue) => {
-        return previousState.then(() => {
-            const fontfile = currentValue.replace(/.*\/([^/]+)/, '$1')
-            return fs.copyFile(currentValue, `${fontPath}/${fontfile}`);
-        })
-    }, Promise.resolve());
-
-    // fc-cache -fv
-    await execAsync("fc-cache -fv");
+    // ln -s /home/site/wwwroot/fonts $FONT_PATH
+    await execAsync(`ln -s /home/site/wwwroot/fonts ${fontPath}`);
 }
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
